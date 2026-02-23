@@ -3,409 +3,610 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MĘSKI WYPAD - Burgas & Sunny Beach 2026</title>
+    <title>MĘSKI WYPAD — Burgas & Sunny Beach 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Barlow:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg: #0d0d0d;
-            --bg-card: #1a1a1a;
-            --bg-card-hover: #222;
-            --accent: #ff6a00;
-            --accent-glow: rgba(255, 106, 0, 0.3);
-            --neon: #00e0ff;
-            --neon-glow: rgba(0, 224, 255, 0.25);
-            --text: #e8e8e8;
-            --text-muted: #999;
-            --border: #333;
-            --success: #00c853;
-            --radius: 12px;
+            --bg:            #f6f3ec;
+            --bg-card:       #ffffff;
+            --bg-card-hover: #fdfcf8;
+            --navy:          #1c2e4a;
+            --navy-dim:      rgba(28,46,74,.07);
+            --navy-glow:     rgba(28,46,74,.14);
+            --gold:          #c8891a;
+            --gold-2:        #e2a020;
+            --gold-dim:      rgba(200,137,26,.1);
+            --gold-glow:     rgba(200,137,26,.22);
+            --teal:          #0d7a6e;
+            --teal-dim:      rgba(13,122,110,.08);
+            --text:          #1a1510;
+            --text-muted:    #7a736b;
+            --text-dim:      #4a4540;
+            --border:        rgba(28,46,74,.1);
+            --border-mid:    rgba(28,46,74,.17);
+            --border-strong: rgba(28,46,74,.26);
+            --success:       #2a7a4c;
+            --radius:        4px;
         }
 
         html { scroll-behavior: smooth; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Barlow', system-ui, sans-serif;
             background: var(--bg);
             color: var(--text);
-            line-height: 1.6;
+            line-height: 1.75;
+            font-size: 1rem;
             overflow-x: hidden;
+            animation: page-in .5s ease both;
+        }
+        @keyframes page-in { from { opacity: 0; } to { opacity: 1; } }
+
+        /* GRAIN OVERLAY */
+        body::before {
+            content: '';
+            position: fixed; inset: -50%;
+            width: 200%; height: 200%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
+            opacity: 0.025;
+            pointer-events: none; z-index: 9999;
+            animation: grain-shift 7s steps(2) infinite;
+        }
+        @keyframes grain-shift {
+            0%   { transform: translate(0,0); }
+            25%  { transform: translate(-1%,2%); }
+            50%  { transform: translate(2%,-1%); }
+            75%  { transform: translate(-1.5%,-1.5%); }
+            100% { transform: translate(1%,1%); }
         }
 
-        /* NAV */
+        /* ═══════════════ NAV ═══════════════ */
         nav {
             position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-            background: rgba(13,13,13,0.92);
-            backdrop-filter: blur(12px);
+            background: rgba(246,243,236,.96);
+            backdrop-filter: blur(18px) saturate(1.5);
             border-bottom: 1px solid var(--border);
-            padding: 0 1rem;
-            transition: transform .3s;
+            transition: transform .3s ease;
+            box-shadow: 0 1px 24px rgba(28,46,74,.07);
+        }
+        nav::after {
+            content: ''; position: absolute;
+            bottom: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold-2) 70%, transparent 100%);
+            opacity: .55;
         }
         nav.hidden { transform: translateY(-100%); }
+
         .nav-inner {
-            max-width: 900px; margin: 0 auto;
-            display: flex; align-items: center; gap: .5rem;
+            max-width: 1060px; margin: 0 auto;
+            display: flex; align-items: center; gap: .2rem;
             overflow-x: auto; scrollbar-width: none;
-            padding: .6rem 0;
+            padding: .6rem 1.5rem;
         }
         .nav-inner::-webkit-scrollbar { display: none; }
-        .nav-inner a {
-            color: var(--text-muted); text-decoration: none;
-            font-size: .8rem; font-weight: 600; text-transform: uppercase;
-            letter-spacing: .04em; white-space: nowrap;
-            padding: .35rem .7rem; border-radius: 6px;
-            transition: color .2s, background .2s;
-        }
-        .nav-inner a:hover, .nav-inner a.active {
-            color: var(--accent); background: rgba(255,106,0,.1);
-        }
 
-        /* HERO */
-        .hero {
-            min-height: 100vh; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; text-align: center;
-            padding: 2rem 1.5rem;
-            background:
-                linear-gradient(180deg, rgba(13,13,13,0) 0%, rgba(13,13,13,.6) 50%, var(--bg) 100%),
-                url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1400&q=80') center/cover no-repeat;
+        .nav-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem; letter-spacing: .1em;
+            color: var(--navy); text-decoration: none;
+            margin-right: auto; white-space: nowrap;
+            transition: color .2s;
+        }
+        .nav-logo:hover { color: var(--gold); }
+
+        .nav-inner a:not(.nav-logo) {
+            color: var(--text-muted); text-decoration: none;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: .8rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .12em;
+            white-space: nowrap; padding: .35rem .85rem;
+            border-radius: var(--radius);
+            transition: color .2s, background .2s;
             position: relative;
         }
-        .hero::after {
+        .nav-inner a:not(.nav-logo)::after {
+            content: ''; position: absolute;
+            bottom: 0; left: .85rem; right: .85rem;
+            height: 1px; background: var(--navy);
+            transform: scaleX(0); transform-origin: left;
+            transition: transform .25s ease;
+        }
+        .nav-inner a:not(.nav-logo):hover,
+        .nav-inner a:not(.nav-logo).active {
+            color: var(--navy); background: var(--navy-dim);
+        }
+        .nav-inner a:not(.nav-logo):hover::after,
+        .nav-inner a:not(.nav-logo).active::after { transform: scaleX(1); }
+
+        /* ═══════════════ HERO ═══════════════ */
+        .hero {
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; padding: 2rem 1.5rem;
+            position: relative; overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute; inset: 0;
+            background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80') center/cover no-repeat;
+            transform: scale(1.08);
+            will-change: transform;
+        }
+        .hero-bg::after {
             content: ''; position: absolute; inset: 0;
-            background: radial-gradient(ellipse at 50% 80%, var(--accent-glow) 0%, transparent 60%);
-            pointer-events: none;
+            background:
+                linear-gradient(180deg,
+                    rgba(15,20,30,.08) 0%,
+                    rgba(15,20,30,.48) 30%,
+                    rgba(20,16,10,.88) 68%,
+                    var(--bg) 100%
+                ),
+                linear-gradient(135deg, rgba(200,137,26,.05) 0%, transparent 60%);
         }
-        .hero-content { position: relative; z-index: 1; }
+        .hero-scanlines {
+            position: absolute; inset: 0; pointer-events: none;
+            background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,.025) 3px, rgba(0,0,0,.025) 4px);
+        }
+        .hero-content { position: relative; z-index: 1; max-width: 820px; }
+
         .hero-badge {
-            display: inline-block;
-            background: var(--accent); color: #000;
-            font-size: .75rem; font-weight: 800; text-transform: uppercase;
-            letter-spacing: .1em; padding: .3rem .9rem; border-radius: 20px;
-            margin-bottom: 1.2rem;
+            display: inline-flex; align-items: center; gap: .55rem;
+            background: rgba(200,137,26,.18);
+            border: 1px solid rgba(200,137,26,.45);
+            color: var(--gold-2);
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: .78rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .18em;
+            padding: .3rem 1.1rem; border-radius: 2px;
+            margin-bottom: 1.8rem;
         }
+        .hero-badge .dot {
+            width: 5px; height: 5px;
+            background: var(--gold-2); border-radius: 50%;
+            animation: blink 2s ease infinite;
+        }
+        @keyframes blink { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.3;transform:scale(.65);} }
+
         .hero h1 {
-            font-size: clamp(2.2rem, 8vw, 4.5rem);
-            font-weight: 900; line-height: 1.05;
-            text-transform: uppercase;
-            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(4.5rem, 13vw, 10rem);
+            font-weight: 400; line-height: .88;
+            letter-spacing: .05em;
+            background: linear-gradient(135deg, #fff 10%, #f5e8c8 45%, var(--gold-2) 80%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text;
+            background-clip: text; margin-bottom: .6rem;
+        }
+        .hero-subtitle {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(1rem, 3vw, 1.55rem);
+            font-weight: 700; letter-spacing: .18em;
+            text-transform: uppercase;
+            color: #8ee6ff;
+            text-shadow: 0 0 20px rgba(0,200,255,.3);
             margin-bottom: .5rem;
         }
-        .hero h2 {
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            font-weight: 400; color: var(--neon);
-            text-shadow: 0 0 20px var(--neon-glow);
-            margin-bottom: .4rem;
+        .hero-dates {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+            font-weight: 600; letter-spacing: .1em;
+            color: rgba(255,255,255,.65);
+            margin-bottom: .8rem;
         }
-        .hero .dates {
-            font-size: clamp(1.1rem, 3vw, 1.6rem);
-            font-weight: 700; color: #fff;
-            margin-bottom: 1.5rem;
+        .hero-coords {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .7rem; color: rgba(255,255,255,.22);
+            letter-spacing: .12em; margin-bottom: 2rem;
         }
         .hero-stats {
-            display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;
-            margin-bottom: 2rem;
+            display: inline-flex;
+            border: 1px solid rgba(255,255,255,.16);
+            border-radius: var(--radius); overflow: hidden;
+            background: rgba(0,0,0,.28); backdrop-filter: blur(8px);
+            margin-bottom: 1.8rem;
         }
         .hero-stat {
-            text-align: center;
+            text-align: center; padding: .85rem 1.5rem;
+            border-right: 1px solid rgba(255,255,255,.1);
         }
+        .hero-stat:last-child { border-right: none; }
         .hero-stat .num {
-            font-size: 2rem; font-weight: 900; color: var(--accent);
-            display: block; line-height: 1;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.2rem; letter-spacing: .03em;
+            color: var(--gold-2); display: block; line-height: 1;
         }
         .hero-stat .label {
-            font-size: .7rem; text-transform: uppercase; color: var(--text-muted);
-            letter-spacing: .05em;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: .65rem; text-transform: uppercase;
+            color: rgba(255,255,255,.5); letter-spacing: .14em;
+            margin-top: .2rem; display: block;
+        }
+        .weather-badge {
+            display: inline-flex; align-items: center; gap: .5rem;
+            background: rgba(255,255,255,.12);
+            border: 1px solid rgba(255,255,255,.2);
+            padding: .42rem 1.1rem; border-radius: 2px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: .88rem; font-weight: 600;
+            letter-spacing: .08em; color: rgba(255,255,255,.85);
+            margin-bottom: 1.8rem;
+        }
+        .countdown {
+            display: flex; gap: 1px; justify-content: center;
+        }
+        .countdown-item {
+            text-align: center;
+            background: rgba(0,0,0,.35); backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,.12);
+            padding: .85rem 1.15rem; min-width: 68px;
+        }
+        .countdown-item .val {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.9rem; font-weight: 600;
+            color: #8ee6ff; display: block; line-height: 1;
+            text-shadow: 0 0 14px rgba(0,200,255,.3);
+        }
+        .countdown-item .unit {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: .62rem; text-transform: uppercase;
+            color: rgba(255,255,255,.45); letter-spacing: .14em;
+            margin-top: .3rem; display: block;
         }
         .scroll-hint {
-            position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
-            z-index: 1; animation: bounce 2s infinite;
-            color: var(--text-muted); font-size: 1.5rem;
+            position: absolute; bottom: 2rem; left: 50%;
+            transform: translateX(-50%); z-index: 1;
+            display: flex; flex-direction: column;
+            align-items: center; gap: .3rem;
+            color: rgba(255,255,255,.28);
+            font-size: .68rem;
+            font-family: 'Barlow Condensed', sans-serif;
+            letter-spacing: .15em; text-transform: uppercase;
+            animation: pulse-down 2.5s ease infinite;
         }
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(8px); }
+        .scroll-hint-line {
+            width: 1px; height: 40px;
+            background: linear-gradient(to bottom, rgba(255,255,255,.4), transparent);
+        }
+        @keyframes pulse-down {
+            0%,100%{transform:translateX(-50%) translateY(0);opacity:.55;}
+            50%{transform:translateX(-50%) translateY(9px);opacity:1;}
         }
 
-        /* SECTIONS */
+        /* ═══════════════ SECTIONS ═══════════════ */
         .section {
-            max-width: 900px; margin: 0 auto;
-            padding: 4rem 1.5rem;
+            max-width: 1060px; margin: 0 auto;
+            padding: 6rem 2rem;
+        }
+        .section-header {
+            display: flex; align-items: flex-end; gap: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-num {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 5.5rem; line-height: .8;
+            color: rgba(28,46,74,.08);
+            letter-spacing: .02em; user-select: none; flex-shrink: 0;
         }
         .section-title {
-            font-size: 1.8rem; font-weight: 800; text-transform: uppercase;
-            margin-bottom: .3rem;
-            display: flex; align-items: center; gap: .5rem;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.6rem; font-weight: 400;
+            text-transform: uppercase; letter-spacing: .07em;
+            color: var(--navy); line-height: 1; margin-bottom: .3rem;
         }
-        .section-title .emoji { font-size: 1.5rem; }
         .section-sub {
-            color: var(--text-muted); font-size: .9rem; margin-bottom: 2rem;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: .82rem; font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: .12em;
         }
-        .divider {
-            height: 3px; width: 60px;
-            background: linear-gradient(90deg, var(--accent), transparent);
-            border-radius: 2px; margin-bottom: 2rem;
+        .section-rule {
+            height: 2px; margin-bottom: 2.5rem;
+            background: linear-gradient(90deg, var(--gold) 0%, rgba(200,137,26,.2) 40%, transparent 100%);
         }
 
-        /* CARDS */
+        /* ═══════════════ CARDS ═══════════════ */
         .card {
             background: var(--bg-card);
             border: 1px solid var(--border);
+            border-left: 3px solid var(--navy);
             border-radius: var(--radius);
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            transition: border-color .3s, box-shadow .3s;
+            padding: 1.8rem; margin-bottom: 1rem;
+            transition: background .3s, border-color .3s, box-shadow .3s, transform .25s;
+            box-shadow: 0 2px 12px rgba(28,46,74,.06);
         }
         .card:hover {
-            border-color: var(--accent);
-            box-shadow: 0 0 20px var(--accent-glow);
+            background: var(--bg-card-hover);
+            border-color: var(--border-mid);
+            border-left-color: var(--gold);
+            box-shadow: 0 8px 36px rgba(28,46,74,.12);
+            transform: translateY(-1px);
         }
         .card h3 {
-            font-size: 1.1rem; font-weight: 700;
-            margin-bottom: .5rem; color: #fff;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.25rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .06em;
+            margin-bottom: .55rem; color: var(--navy);
+        }
+        .card p { color: var(--text-dim); font-size: .97rem; }
+
+        .card-note {
+            border-left-color: var(--teal);
+            background: var(--teal-dim);
+        }
+        .card-note:hover {
+            border-left-color: var(--teal);
+            box-shadow: 0 8px 36px rgba(13,122,110,.1);
+        }
+        .card-success {
+            border-left-color: var(--success);
+            background: rgba(42,122,76,.05);
+        }
+        .card-success:hover {
+            border-left-color: var(--success);
+            box-shadow: 0 8px 36px rgba(42,122,76,.1);
         }
 
-        /* FLIGHT CARDS */
+        /* ═══════════════ FLIGHT ═══════════════ */
         .flight-card {
-            display: flex; align-items: center; gap: 1.2rem;
-            flex-wrap: wrap;
+            display: flex; align-items: center;
+            gap: 1.5rem; flex-wrap: wrap;
         }
-        .flight-icon {
-            font-size: 2.5rem; flex-shrink: 0;
+        .flight-icon { font-size: 2.4rem; flex-shrink: 0; }
+        .flight-route { flex: 1; min-width: 180px; }
+        .airports {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem; letter-spacing: .07em; color: var(--navy);
         }
-        .flight-route {
-            flex: 1; min-width: 200px;
-        }
-        .flight-route .airports {
-            font-size: 1.3rem; font-weight: 800; color: #fff;
-        }
-        .flight-route .airports .arrow { color: var(--accent); margin: 0 .4rem; }
-        .flight-meta {
-            font-size: .85rem; color: var(--text-muted);
-        }
+        .airports .arrow { color: var(--gold); margin: 0 .4rem; }
+        .flight-meta { font-size: .88rem; color: var(--text-muted); margin-top: .2rem; }
         .flight-badge {
-            background: rgba(255,106,0,.15); color: var(--accent);
-            font-size: .75rem; font-weight: 700;
-            padding: .2rem .6rem; border-radius: 6px;
-            display: inline-block; margin-top: .3rem;
+            display: inline-flex; align-items: center;
+            background: var(--navy-dim);
+            border: 1px solid var(--border-strong);
+            color: var(--navy);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .78rem; font-weight: 600;
+            padding: .2rem .65rem; border-radius: 2px;
+            margin-top: .4rem; letter-spacing: .1em;
         }
 
-        /* ACCOMMODATION */
+        /* ═══════════════ ACCOMMODATION ═══════════════ */
         .accom-grid {
-            display: grid; grid-template-columns: 1fr;
-            gap: 1.5rem;
+            display: grid; grid-template-columns: 1fr; gap: 2rem;
         }
         @media (min-width: 600px) {
             .accom-grid { grid-template-columns: 1fr 1fr; }
         }
         .accom-img {
-            width: 100%; height: 220px; object-fit: cover;
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
+            width: 100%; height: 260px; object-fit: cover;
+            border-radius: var(--radius); border: 1px solid var(--border);
         }
-        .accom-details { display: flex; flex-direction: column; gap: .7rem; }
+        .accom-details { display: flex; flex-direction: column; gap: 1rem; }
         .accom-detail {
-            display: flex; align-items: flex-start; gap: .5rem;
-            font-size: .9rem;
+            display: flex; align-items: flex-start;
+            gap: .65rem; font-size: .96rem;
         }
-        .accom-detail .icon { font-size: 1.1rem; flex-shrink: 0; margin-top: .1rem; }
+        .accom-detail .icon { font-size: 1.05rem; flex-shrink: 0; margin-top: .15rem; }
+        .accom-detail span { color: var(--text-dim); }
+        .accom-detail strong { color: var(--text); }
+
         .btn {
-            display: inline-flex; align-items: center; gap: .4rem;
-            background: var(--accent); color: #000;
-            font-weight: 700; font-size: .9rem;
-            padding: .7rem 1.4rem; border-radius: 8px;
+            display: inline-flex; align-items: center; gap: .45rem;
+            background: var(--navy); color: #fff;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800; font-size: .95rem;
+            letter-spacing: .12em; text-transform: uppercase;
+            padding: .72rem 1.5rem; border-radius: var(--radius);
             text-decoration: none;
-            transition: transform .2s, box-shadow .2s;
+            transition: background .2s, transform .2s, box-shadow .2s;
+            margin-top: .3rem;
         }
         .btn:hover {
+            background: var(--gold); color: #1a1510;
             transform: translateY(-2px);
-            box-shadow: 0 4px 20px var(--accent-glow);
+            box-shadow: 0 6px 24px var(--gold-glow);
         }
 
-        /* TRANSPORT TABLE */
+        /* ═══════════════ TRANSPORT ═══════════════ */
         .transport-grid {
             display: grid; grid-template-columns: 1fr; gap: 1rem;
         }
         @media (min-width: 600px) {
             .transport-grid { grid-template-columns: 1fr 1fr; }
         }
-        .transport-card .t-label {
-            font-size: .75rem; text-transform: uppercase;
-            color: var(--accent); font-weight: 700;
-            letter-spacing: .05em; margin-bottom: .3rem;
+        .t-label {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: .72rem; text-transform: uppercase;
+            color: var(--gold); font-weight: 700;
+            letter-spacing: .14em; margin-bottom: .4rem;
+        }
+        .price-tag {
+            display: inline-flex; align-items: center;
+            background: var(--teal-dim);
+            border: 1px solid rgba(13,122,110,.22);
+            color: var(--teal);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .82rem; font-weight: 500;
+            padding: .08rem .42rem; border-radius: 2px;
         }
 
-        /* TIMELINE */
-        .timeline { position: relative; padding-left: 2rem; }
+        /* ═══════════════ TIMELINE ═══════════════ */
+        .timeline { position: relative; padding-left: 2.5rem; }
         .timeline::before {
-            content: ''; position: absolute; left: .55rem; top: 0; bottom: 0;
-            width: 2px; background: var(--border);
+            content: ''; position: absolute;
+            left: .75rem; top: 12px; bottom: 12px;
+            width: 2px;
+            background: linear-gradient(180deg, var(--navy) 0%, rgba(28,46,74,.1) 100%);
         }
-        .day-card {
-            position: relative; margin-bottom: 1.2rem;
-            cursor: pointer;
-        }
+        .day-card { position: relative; margin-bottom: 1rem; cursor: pointer; }
         .day-card::before {
             content: ''; position: absolute;
-            left: -1.55rem; top: 1.2rem;
+            left: -1.82rem; top: 1.35rem;
             width: 12px; height: 12px;
-            background: var(--accent); border-radius: 50%;
-            border: 2px solid var(--bg);
-            box-shadow: 0 0 8px var(--accent-glow);
+            background: var(--bg);
+            border: 2px solid var(--navy);
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px rgba(28,46,74,.1);
             z-index: 1;
+            transition: background .3s, box-shadow .3s, border-color .3s;
+        }
+        .day-card.open::before {
+            background: var(--gold);
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px var(--gold-dim), 0 0 14px var(--gold-glow);
         }
         .day-header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 1rem 1.2rem;
+            display: flex; align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.4rem;
             background: var(--bg-card);
             border: 1px solid var(--border);
+            border-left: 3px solid transparent;
             border-radius: var(--radius);
-            transition: border-color .3s, box-shadow .3s;
+            transition: border-color .3s, background .3s, box-shadow .3s;
+            box-shadow: 0 2px 8px rgba(28,46,74,.05);
         }
-        .day-card.open .day-header,
         .day-header:hover {
-            border-color: var(--accent);
-            box-shadow: 0 0 15px var(--accent-glow);
+            border-color: var(--border-mid);
+            border-left-color: var(--navy);
+            box-shadow: 0 4px 20px rgba(28,46,74,.1);
+        }
+        .day-card.open .day-header {
+            border-left-color: var(--gold);
+            border-bottom-color: transparent;
+            border-radius: var(--radius) var(--radius) 0 0;
         }
         .day-tag {
-            font-size: .65rem; font-weight: 800;
-            text-transform: uppercase; letter-spacing: .08em;
-            color: var(--accent); margin-bottom: .15rem;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: .7rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .14em;
+            color: var(--gold); margin-bottom: .2rem;
         }
         .day-title {
-            font-size: 1.05rem; font-weight: 700; color: #fff;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.12rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .05em;
+            color: var(--navy);
         }
         .day-toggle {
-            font-size: 1.2rem; transition: transform .3s;
+            font-size: .9rem; flex-shrink: 0; margin-left: 1rem;
             color: var(--text-muted);
+            transition: transform .35s cubic-bezier(.34,1.56,.64,1), color .3s;
         }
-        .day-card.open .day-toggle { transform: rotate(180deg); }
+        .day-card.open .day-toggle { transform: rotate(180deg); color: var(--gold); }
         .day-body {
             max-height: 0; overflow: hidden;
-            transition: max-height .4s ease;
+            transition: max-height .45s cubic-bezier(.4,0,.2,1);
         }
-        .day-card.open .day-body { max-height: 1200px; }
+        .day-card.open .day-body { max-height: 1500px; }
         .day-body-inner {
-            padding: 1rem 1.2rem;
+            padding: 1rem 1.4rem 1.2rem;
             background: var(--bg-card);
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-mid);
             border-top: none;
             border-radius: 0 0 var(--radius) var(--radius);
         }
         .event {
-            display: flex; gap: .6rem;
-            padding: .5rem 0;
-            border-bottom: 1px solid rgba(255,255,255,.05);
-            font-size: .9rem;
+            display: flex; gap: 1rem;
+            padding: .6rem 0;
+            border-bottom: 1px solid rgba(28,46,74,.06);
+            font-size: .96rem;
         }
         .event:last-child { border-bottom: none; }
         .event-time {
-            color: var(--neon); font-weight: 700;
-            font-size: .8rem; min-width: 50px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--teal); font-weight: 500;
+            font-size: .83rem; min-width: 60px;
             flex-shrink: 0; padding-top: .1rem;
         }
+        .event span:last-child { color: var(--text-dim); }
 
-        /* BUDGET TABLE */
-        .budget-table {
-            width: 100%; border-collapse: collapse;
-            font-size: .9rem;
-        }
+        /* ═══════════════ BUDGET ═══════════════ */
+        .budget-table { width: 100%; border-collapse: collapse; }
         .budget-table th {
-            text-align: left; padding: .7rem .8rem;
-            font-size: .7rem; text-transform: uppercase;
-            letter-spacing: .06em; color: var(--text-muted);
-            border-bottom: 2px solid var(--border);
+            text-align: left; padding: .75rem 1rem;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: .72rem; text-transform: uppercase;
+            letter-spacing: .14em; color: var(--text-muted);
+            border-bottom: 2px solid var(--border-strong);
+            background: rgba(28,46,74,.03);
         }
+        .budget-table th:first-child { padding-left: 1.8rem; }
         .budget-table td {
-            padding: .7rem .8rem;
-            border-bottom: 1px solid rgba(255,255,255,.05);
+            padding: .85rem 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: .96rem; color: var(--text-dim);
         }
-        .budget-table tr:hover td { background: rgba(255,255,255,.02); }
+        .budget-table td:first-child { padding-left: 1.8rem; }
+        .budget-table tr:hover td { background: rgba(28,46,74,.02); }
         .budget-table .total td {
-            font-weight: 800; color: var(--accent);
-            border-top: 2px solid var(--accent);
-            font-size: 1rem;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 800; font-size: 1.15rem;
+            letter-spacing: .05em; color: var(--navy);
+            border-top: 2px solid var(--navy);
+            border-bottom: none;
         }
 
-        /* INFO GRID */
-        .info-grid {
-            display: grid; grid-template-columns: 1fr; gap: 1rem;
-        }
-        @media (min-width: 600px) {
-            .info-grid { grid-template-columns: 1fr 1fr; }
-        }
-        .info-card h4 {
-            font-size: .85rem; font-weight: 700;
-            color: var(--accent); margin-bottom: .5rem;
-            display: flex; align-items: center; gap: .3rem;
-        }
-        .info-card ul {
-            list-style: none; font-size: .85rem;
-        }
-        .info-card li {
-            padding: .25rem 0;
-            padding-left: 1.2rem;
-            position: relative;
-        }
-        .info-card li::before {
-            content: ''; position: absolute; left: 0; top: .6rem;
-            width: 5px; height: 5px; border-radius: 50%;
-            background: var(--accent);
-        }
-
-        /* PRICE TAG */
-        .price-tag {
-            display: inline-block;
-            background: rgba(0,224,255,.1);
-            color: var(--neon);
-            font-weight: 700; font-size: .8rem;
-            padding: .15rem .5rem; border-radius: 4px;
-        }
-
-        /* FOOTER */
+        /* ═══════════════ FOOTER ═══════════════ */
         footer {
-            text-align: center; padding: 3rem 1.5rem;
-            color: var(--text-muted); font-size: .8rem;
-            border-top: 1px solid var(--border);
+            text-align: center; padding: 4rem 2rem;
+            border-top: 2px solid var(--border);
+            position: relative; overflow: hidden;
+            background: var(--bg-card);
         }
-        footer .emoji-big { font-size: 2rem; display: block; margin-bottom: .5rem; }
+        .footer-bg-text {
+            position: absolute;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(4rem, 12vw, 9rem);
+            color: rgba(28,46,74,.04);
+            letter-spacing: .05em;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            white-space: nowrap; pointer-events: none; user-select: none;
+        }
+        .footer-stamp {
+            position: relative; display: inline-block;
+            border: 2px solid var(--border-strong);
+            padding: 1.1rem 2.2rem; margin-bottom: 1.4rem;
+            border-radius: 2px;
+        }
+        .footer-stamp::before {
+            content: ''; position: absolute; inset: 4px;
+            border: 1px solid var(--border); border-radius: 1px;
+            pointer-events: none;
+        }
+        .stamp-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.9rem; letter-spacing: .12em;
+            color: var(--navy); line-height: 1;
+        }
+        .stamp-sub {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: .75rem; letter-spacing: .22em;
+            text-transform: uppercase; color: var(--text-muted); margin-top: .3rem;
+        }
+        .footer-bottom {
+            position: relative;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1rem; letter-spacing: .08em; color: var(--text-muted);
+        }
 
-        /* REVEAL ANIMATION */
+        /* ═══════════════ REVEAL ═══════════════ */
         .reveal {
-            opacity: 0; transform: translateY(30px);
-            transition: opacity .6s ease, transform .6s ease;
+            opacity: 0; transform: translateY(22px);
+            transition: opacity .7s ease, transform .7s ease;
         }
-        .reveal.visible {
-            opacity: 1; transform: translateY(0);
-        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
 
-        /* COUNTDOWN */
-        .countdown {
-            display: flex; gap: 1rem; justify-content: center;
-            flex-wrap: wrap; margin-top: .5rem;
-        }
-        .countdown-item {
-            text-align: center;
-            min-width: 60px;
-        }
-        .countdown-item .val {
-            font-size: 1.8rem; font-weight: 900;
-            color: var(--neon);
-            text-shadow: 0 0 15px var(--neon-glow);
-            line-height: 1;
-        }
-        .countdown-item .unit {
-            font-size: .65rem; text-transform: uppercase;
-            color: var(--text-muted); letter-spacing: .05em;
-        }
+        /* ═══════════════ UTILS ═══════════════ */
+        strong { color: var(--text); font-weight: 600; }
 
-        /* WEATHER BADGE */
-        .weather-badge {
-            display: inline-flex; align-items: center; gap: .4rem;
-            background: rgba(255,255,255,.08);
-            padding: .4rem .8rem; border-radius: 8px;
-            font-size: .85rem; margin-top: .5rem;
+        @media (max-width: 600px) {
+            .section { padding: 4rem 1.25rem; }
+            .section-num { display: none; }
         }
     </style>
 </head>
@@ -414,23 +615,28 @@
 <!-- NAV -->
 <nav id="nav">
     <div class="nav-inner">
-        <a href="#hero">Start</a>
+        <a href="#hero" class="nav-logo">MW'26</a>
         <a href="#loty">Loty</a>
         <a href="#nocleg">Nocleg</a>
         <a href="#transport">Transport</a>
         <a href="#plan">Plan</a>
         <a href="#budzet">Budżet</a>
-        <a href="#info">Info</a>
     </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-scanlines"></div>
     <div class="hero-content">
-        <div class="hero-badge">Wrzesień 2026</div>
-        <h1>Męski Wypad</h1>
-        <h2>Burgas & Sunny Beach, Bułgaria</h2>
-        <div class="dates">7 - 11 września 2026</div>
+        <div class="hero-badge">
+            <span class="dot"></span>
+            Wrzesień 2026 &nbsp;·&nbsp; Burgas, Bułgaria
+        </div>
+        <h1>Męski<br>Wypad</h1>
+        <div class="hero-subtitle">Burgas &amp; Sunny Beach</div>
+        <div class="hero-dates">7 — 11 Września 2026</div>
+        <div class="hero-coords">42.4720° N, 27.4703° E &nbsp;|&nbsp; BURGAS, BUŁGARIA</div>
         <div class="hero-stats">
             <div class="hero-stat"><span class="num">8</span><span class="label">Chłopaków</span></div>
             <div class="hero-stat"><span class="num">5</span><span class="label">Dni</span></div>
@@ -438,27 +644,33 @@
             <div class="hero-stat"><span class="num">27°C</span><span class="label">Powietrze</span></div>
         </div>
         <div class="weather-badge">
-            ☀️ Woda ~24°C &nbsp;|&nbsp; Powietrze ~27°C
+            ☀️ &nbsp;Woda ~24°C &nbsp;|&nbsp; Powietrze ~27°C
         </div>
         <div class="countdown" id="countdown"></div>
     </div>
-    <div class="scroll-hint">&#8595;</div>
+    <div class="scroll-hint">
+        <div class="scroll-hint-line"></div>
+        scroll
+    </div>
 </section>
 
 <!-- LOTY -->
 <section class="section" id="loty">
-    <div class="reveal">
-        <h2 class="section-title"><span class="emoji">✈️</span> Loty</h2>
-        <p class="section-sub">Wizz Air, bezpośrednie przeloty z Warszawy</p>
-        <div class="divider"></div>
+    <div class="section-header reveal">
+        <div class="section-num">01</div>
+        <div>
+            <h2 class="section-title">✈️ Loty</h2>
+            <div class="section-sub">Wizz Air &nbsp;·&nbsp; Bezpośrednie przeloty z Warszawy</div>
+        </div>
     </div>
+    <div class="section-rule"></div>
 
     <div class="card flight-card reveal">
         <div class="flight-icon">🛫</div>
         <div class="flight-route">
             <div class="airports">WAW <span class="arrow">→</span> BOJ</div>
             <div class="flight-meta">Poniedziałek, 7 września 2026 &bull; ~2h 30min</div>
-            <div class="flight-badge">Wizz Air W6 1561</div>
+            <div class="flight-badge">W6 1561</div>
         </div>
     </div>
 
@@ -467,25 +679,26 @@
         <div class="flight-route">
             <div class="airports">BOJ <span class="arrow">→</span> WAW</div>
             <div class="flight-meta">Piątek, 11 września 2026 &bull; ~2h 30min</div>
-            <div class="flight-badge">Wizz Air W6 1562</div>
+            <div class="flight-badge">W6 1562</div>
         </div>
     </div>
 
-    <div class="card reveal" style="border-left: 3px solid var(--neon); margin-top: .5rem;">
-        <p style="font-size: .85rem;">
-            💡 <strong>Pamiętaj:</strong> Online check-in 24h przed lotem w apce Wizz Air.
-            Dowód osobisty wystarczy (Bułgaria jest w UE).
-        </p>
+    <div class="card card-note reveal">
+        <p>💡 <strong>Pamiętaj:</strong> Online check-in 24h przed lotem w apce Wizz Air.
+        Dowód osobisty wystarczy — Bułgaria jest w UE.</p>
     </div>
 </section>
 
 <!-- NOCLEG -->
 <section class="section" id="nocleg">
-    <div class="reveal">
-        <h2 class="section-title"><span class="emoji">🏠</span> Nocleg</h2>
-        <p class="section-sub">House Sarafovo Beach &bull; 4 noce</p>
-        <div class="divider"></div>
+    <div class="section-header reveal">
+        <div class="section-num">02</div>
+        <div>
+            <h2 class="section-title">🏠 Nocleg</h2>
+            <div class="section-sub">House Sarafovo Beach &nbsp;·&nbsp; 4 noce</div>
+        </div>
     </div>
+    <div class="section-rule"></div>
 
     <div class="card reveal">
         <div class="accom-grid">
@@ -504,14 +717,14 @@
                 </div>
                 <div class="accom-detail">
                     <span class="icon">💰</span>
-                    <span><strong>~300-500 PLN / os.</strong> (pokoje 2-osobowe)</span>
+                    <span><strong>~300–500 PLN / os.</strong> (pokoje 2-osobowe)</span>
                 </div>
                 <div class="accom-detail">
                     <span class="icon">🏖️</span>
                     <span>Spokojna dzielnica z plażą, restauracje, sklepy, autobusy do centrum</span>
                 </div>
                 <a href="https://www.booking.com/searchresults.pl.html?ss=House+Sarafovo+Beach" target="_blank" class="btn">
-                    🔗 Zobacz na Booking.com
+                    🔗 &nbsp;Booking.com
                 </a>
             </div>
         </div>
@@ -520,66 +733,62 @@
 
 <!-- TRANSPORT -->
 <section class="section" id="transport">
-    <div class="reveal">
-        <h2 class="section-title"><span class="emoji">🚌</span> Transport</h2>
-        <p class="section-sub">Jak się poruszać po Burgas i okolicach</p>
-        <div class="divider"></div>
+    <div class="section-header reveal">
+        <div class="section-num">03</div>
+        <div>
+            <h2 class="section-title">🚌 Transport</h2>
+            <div class="section-sub">Jak się poruszać po Burgas i okolicach</div>
+        </div>
     </div>
+    <div class="section-rule"></div>
 
     <div class="transport-grid">
         <div class="card transport-card reveal">
             <div class="t-label">Lotnisko → Hotel</div>
             <h3>🚶 Pieszo ~20 min</h3>
-            <p style="font-size:.85rem;color:var(--text-muted)">
-                Tylko 1.5 km! Alternatywnie taxi <span class="price-tag">5-10 BGN</span>
-            </p>
+            <p>Tylko 1.5 km! Alternatywnie taxi <span class="price-tag">5–10 BGN</span></p>
         </div>
 
         <div class="card transport-card reveal">
             <div class="t-label">Autobus do centrum</div>
             <h3>🚌 Linia #15</h3>
-            <p style="font-size:.85rem;color:var(--text-muted)">
-                Lotnisko → Burgas centrum, ~20 min. Płatność <strong>gotówką!</strong>
-            </p>
+            <p>Lotnisko → Burgas centrum, ~20 min. Płatność <strong>gotówką!</strong></p>
         </div>
 
         <div class="card transport-card reveal">
             <div class="t-label">Burgas → Sunny Beach</div>
             <h3>🚐 M-BUS</h3>
-            <p style="font-size:.85rem;color:var(--text-muted)">
-                Avtogara Jug → Sarafovo → Pomorie → Nesebar → Sunny Beach<br>
-                ~1h 10min &bull; <span class="price-tag">8 BGN (~16 PLN)</span><br>
-                Co 1.5-2h (6:10 – 20:20) &bull; <strong>Tylko gotówka!</strong>
-            </p>
+            <p>Avtogara Jug → Sarafovo → Pomorie → Nesebar → Sunny Beach<br>
+               ~1h 10min &bull; <span class="price-tag">8 BGN (~16 PLN)</span><br>
+               Co 1.5–2h (6:10 – 20:20) &bull; <strong>Tylko gotówka!</strong></p>
         </div>
 
         <div class="card transport-card reveal">
             <div class="t-label">Taksówki</div>
             <h3>🚕 Żółte taxi z licznikiem</h3>
-            <p style="font-size:.85rem;color:var(--text-muted)">
-                Po Burgas: <span class="price-tag">5-15 BGN</span><br>
-                Do Sunny Beach: <span class="price-tag">30-50 BGN</span><br>
-                Polecane: Eko Taxi
-            </p>
+            <p>Po Burgas: <span class="price-tag">5–15 BGN</span><br>
+               Do Sunny Beach: <span class="price-tag">30–50 BGN</span><br>
+               Polecane: Eko Taxi</p>
         </div>
     </div>
 
-    <div class="card reveal" style="border-left: 3px solid var(--neon); margin-top: .5rem;">
-        <p style="font-size: .85rem;">
-            💱 <strong>Kurs walut:</strong> 1 BGN (lew bułgarski) ≈ 2 PLN.
-            Wypłać BGN z bankomatu na miejscu. Wybieraj <strong>"bez przewalutowania"</strong> (without conversion).
-            Karty akceptowane w większości miejsc, ale na autobus musisz mieć <strong>gotówkę</strong>.
-        </p>
+    <div class="card card-note reveal" style="margin-top: 1rem;">
+        <p>💱 <strong>Kurs walut:</strong> 1 BGN (lew bułgarski) ≈ 2 PLN.
+        Wypłać BGN z bankomatu na miejscu. Wybieraj <strong>"bez przewalutowania"</strong> (without conversion).
+        Karty akceptowane w większości miejsc, ale na autobus musisz mieć <strong>gotówkę</strong>.</p>
     </div>
 </section>
 
 <!-- PLAN DZIEŃ PO DNIU -->
 <section class="section" id="plan">
-    <div class="reveal">
-        <h2 class="section-title"><span class="emoji">📋</span> Plan dzień po dniu</h2>
-        <p class="section-sub">Kliknij dzień, żeby rozwinąć szczegóły</p>
-        <div class="divider"></div>
+    <div class="section-header reveal">
+        <div class="section-num">04</div>
+        <div>
+            <h2 class="section-title">📋 Plan dnia</h2>
+            <div class="section-sub">Kliknij dzień, żeby rozwinąć szczegóły</div>
+        </div>
     </div>
+    <div class="section-rule"></div>
 
     <div class="timeline">
         <!-- DZIEŃ 1 -->
@@ -587,7 +796,7 @@
             <div class="day-header" onclick="toggleDay(this)">
                 <div>
                     <div class="day-tag">Dzień 1 &bull; Poniedziałek, 7 września</div>
-                    <div class="day-title">✈️ Przylot & Sarafovo</div>
+                    <div class="day-title">✈️ Przylot &amp; Sarafovo</div>
                 </div>
                 <span class="day-toggle">&#9660;</span>
             </div>
@@ -595,7 +804,7 @@
                 <div class="day-body-inner">
                     <div class="event"><span class="event-time">~14:00</span><span>Lądowanie na lotnisku BOJ, spacer/taxi do hotelu</span></div>
                     <div class="event"><span class="event-time">15:00</span><span>Check-in w House Sarafovo Beach, rozpakowanie</span></div>
-                    <div class="event"><span class="event-time">~16:00</span><span>🏖️ Plaża Sarafovo - pierwszy skok do Morza Czarnego (woda ~24°C!)</span></div>
+                    <div class="event"><span class="event-time">~16:00</span><span>🏖️ Plaża Sarafovo — pierwszy skok do Morza Czarnego (woda ~24°C!)</span></div>
                     <div class="event"><span class="event-time">~18:00</span><span>💰 Wypłata BGN z bankomatu + zakupy: piwo, przekąski, alkohol</span></div>
                     <div class="event"><span class="event-time">~19:30</span><span>🍽️ Kolacja w lokalnej restauracji: kebapcheta, sałatka shopska, piwo Kamenitza</span></div>
                     <div class="event"><span class="event-time">~21:00</span><span>🌅 Wieczorny spacer po plaży, piwo w beach barze</span></div>
@@ -616,8 +825,8 @@
                 <div class="day-body-inner">
                     <div class="event"><span class="event-time">~9:00</span><span>Śniadanie, autobus #15 do centrum Burgas (~20 min)</span></div>
                     <div class="event"><span class="event-time">~10:00</span><span>🚶 Spacer: ul. Aleksandrowska (deptak), Sea Garden (park nad morzem)</span></div>
-                    <div class="event"><span class="event-time">~12:00</span><span>🏖️ Centralna plaża Burgas - kąpiel i opalanie</span></div>
-                    <div class="event"><span class="event-time">~14:00</span><span>🍖 Obiad w mehanie (bułgarska tawerna) - grillowane mięsa + rakia</span></div>
+                    <div class="event"><span class="event-time">~12:00</span><span>🏖️ Centralna plaża Burgas — kąpiel i opalanie</span></div>
+                    <div class="event"><span class="event-time">~14:00</span><span>🍖 Obiad w mehanie (bułgarska tawerna) — grillowane mięsa + rakia</span></div>
                     <div class="event"><span class="event-time">~16:00</span><span>⛵ Port Burgas, rejs na wyspę Św. Anastazji (opcjonalnie) lub plaża</span></div>
                     <div class="event"><span class="event-time">~19:00</span><span>🍽️ Kolacja w restauracji z widokiem na morze</span></div>
                     <div class="event"><span class="event-time">~21:00+</span><span>🎉 Beach bary: Saxa Beach, Caribe (bałkańska impreza!) lub klub Dock 5 w porcie</span></div>
@@ -630,19 +839,19 @@
             <div class="day-header" onclick="toggleDay(this)">
                 <div>
                     <div class="day-tag">Dzień 3 &bull; Środa, 9 września</div>
-                    <div class="day-title">🎉 Sunny Beach & Nesebar</div>
+                    <div class="day-title">🎉 Sunny Beach &amp; Nesebar</div>
                 </div>
                 <span class="day-toggle">&#9660;</span>
             </div>
             <div class="day-body">
                 <div class="day-body-inner">
                     <div class="event"><span class="event-time">~9:00</span><span>🚐 M-BUS z Sarafovo do Sunny Beach (~1h 10min)</span></div>
-                    <div class="event"><span class="event-time">~10:30</span><span>🏖️ Sunny Beach - długa piaszczysta plaża, leżaki, sporty wodne</span></div>
-                    <div class="event"><span class="event-time">~13:00</span><span>🍺 Obiad na plaży - piwo i grill w beach barze</span></div>
-                    <div class="event"><span class="event-time">~15:00</span><span>🏛️ Wycieczka do Nesebaru (Stare Miasto, UNESCO) - autobus/pociąg turystyczny ~10 min</span></div>
+                    <div class="event"><span class="event-time">~10:30</span><span>🏖️ Sunny Beach — długa piaszczysta plaża, leżaki, sporty wodne</span></div>
+                    <div class="event"><span class="event-time">~13:00</span><span>🍺 Obiad na plaży — piwo i grill w beach barze</span></div>
+                    <div class="event"><span class="event-time">~15:00</span><span>🏛️ Wycieczka do Nesebaru (Stare Miasto, UNESCO) — autobus/pociąg turystyczny ~10 min</span></div>
                     <div class="event"><span class="event-time">~17:00</span><span>🌊 Powrót na Sunny Beach, opcjonalnie Action Aquapark</span></div>
-                    <div class="event"><span class="event-time">~19:00</span><span>🍽️ Kolacja - wybór z 400 restauracji na Sunny Beach</span></div>
-                    <div class="event"><span class="event-time">~22:00+</span><span>🔥 IMPREZA! "Las Vegas Bałkanów" - Bedroom Beach, Cacao Beach Club, Mania Beach Bar. Powrót taxi</span></div>
+                    <div class="event"><span class="event-time">~19:00</span><span>🍽️ Kolacja — wybór z 400 restauracji na Sunny Beach</span></div>
+                    <div class="event"><span class="event-time">~22:00+</span><span>🔥 IMPREZA! "Las Vegas Bałkanów" — Bedroom Beach, Cacao Beach Club, Mania Beach Bar. Powrót taxi</span></div>
                 </div>
             </div>
         </div>
@@ -652,15 +861,15 @@
             <div class="day-header" onclick="toggleDay(this)">
                 <div>
                     <div class="day-tag">Dzień 4 &bull; Czwartek, 10 września</div>
-                    <div class="day-title">😎 Relax & Pożegnalny wieczór</div>
+                    <div class="day-title">😎 Relax &amp; Pożegnalny wieczór</div>
                 </div>
                 <span class="day-toggle">&#9660;</span>
             </div>
             <div class="day-body">
                 <div class="day-body-inner">
                     <div class="event"><span class="event-time">~10:00</span><span>Leniwe śniadanie, ostatnia kąpiel na plaży Sarafovo</span></div>
-                    <div class="event"><span class="event-time">~12:00</span><span>🚤 Opcja A: Marina Sarafovo - spacer po porcie jachtowym<br>🧖 Opcja B: Wycieczka do Pomorie (20 min autobusem) - uzdrowisko, warzelnie soli</span></div>
-                    <div class="event"><span class="event-time">~14:00</span><span>🍽️ Pożegnalny obiad - owoce morza lub grill w ulubionej restauracji</span></div>
+                    <div class="event"><span class="event-time">~12:00</span><span>🚤 Opcja A: Marina Sarafovo — spacer po porcie jachtowym<br>🧖 Opcja B: Wycieczka do Pomorie (20 min autobusem) — uzdrowisko, warzelnie soli</span></div>
+                    <div class="event"><span class="event-time">~14:00</span><span>🍽️ Pożegnalny obiad — owoce morza lub grill w ulubionej restauracji</span></div>
                     <div class="event"><span class="event-time">~16:00</span><span>🛍️ Ostatnie zakupy: alkohol, pamiątki (rakia, bułgarskie róże)</span></div>
                     <div class="event"><span class="event-time">~19:00</span><span>🍺 Pożegnalna kolacja + piwo</span></div>
                     <div class="event"><span class="event-time">wieczór</span><span>📦 Pakowanie, wcześniejszy sen przed jutrzejszym lotem</span></div>
@@ -681,7 +890,7 @@
                 <div class="day-body-inner">
                     <div class="event"><span class="event-time">do 12:00</span><span>Check-out z hotelu</span></div>
                     <div class="event"><span class="event-time">✈️</span><span>Lot Wizz Air W6 1562: BOJ → WAW (sprawdź godzinę na potwierdzeniu)</span></div>
-                    <div class="event"><span class="event-time">💡</span><span>Z Sarafovo na lotnisko to tylko <strong>20 min pieszo</strong> - taxi niepotrzebne!</span></div>
+                    <div class="event"><span class="event-time">💡</span><span>Z Sarafovo na lotnisko to tylko <strong>20 min pieszo</strong> — taxi niepotrzebne!</span></div>
                 </div>
             </div>
         </div>
@@ -690,13 +899,16 @@
 
 <!-- BUDŻET -->
 <section class="section" id="budzet">
-    <div class="reveal">
-        <h2 class="section-title"><span class="emoji">💰</span> Szacunkowy budżet</h2>
-        <p class="section-sub">Na osobę, przy pokojach 2-osobowych &bull; 1 BGN ≈ 2 PLN</p>
-        <div class="divider"></div>
+    <div class="section-header reveal">
+        <div class="section-num">05</div>
+        <div>
+            <h2 class="section-title">💰 Budżet</h2>
+            <div class="section-sub">Na osobę &nbsp;·&nbsp; Pokoje 2-osobowe &nbsp;·&nbsp; 1 BGN ≈ 2 PLN</div>
+        </div>
     </div>
+    <div class="section-rule"></div>
 
-    <div class="card reveal" style="overflow-x: auto;">
+    <div class="card reveal" style="overflow-x: auto; padding: 0;">
         <table class="budget-table">
             <thead>
                 <tr>
@@ -717,12 +929,12 @@
                     <td>300 – 500</td>
                 </tr>
                 <tr>
-                    <td>🍽️ Jedzenie (4 dni × 50-80 BGN)</td>
+                    <td>🍽️ Jedzenie (4 dni × 50–80 BGN)</td>
                     <td>200 – 320</td>
                     <td>400 – 640</td>
                 </tr>
                 <tr>
-                    <td>🍺 Alkohol (piwo 3-5 PLN, drinki 8-15)</td>
+                    <td>🍺 Alkohol (piwo 3–5 PLN, drinki 8–15)</td>
                     <td>100 – 200</td>
                     <td>200 – 400</td>
                 </tr>
@@ -745,71 +957,20 @@
         </table>
     </div>
 
-    <div class="card reveal" style="border-left: 3px solid var(--success); margin-top: .5rem;">
-        <p style="font-size:.85rem;">
-            ✅ <strong>Bułgaria = jeden z najtańszych krajów w Europie.</strong>
-            Piwo w barze 6-14 PLN, obiad w restauracji 30-50 PLN, taxi po mieście 10-30 PLN.
-        </p>
-    </div>
-</section>
-
-<!-- PRAKTYCZNE INFO -->
-<section class="section" id="info">
-    <div class="reveal">
-        <h2 class="section-title"><span class="emoji">📌</span> Praktyczne informacje</h2>
-        <p class="section-sub">Wszystko co musisz wiedzieć przed wyjazdem</p>
-        <div class="divider"></div>
-    </div>
-
-    <div class="info-grid">
-        <div class="card info-card reveal">
-            <h4>🎒 Co zabrać</h4>
-            <ul>
-                <li><strong>Dowód osobisty</strong> (Bułgaria w UE, paszport niepotrzebny)</li>
-                <li>Karta płatnicza (Visa/MC) - terminale w większości miejsc</li>
-                <li><strong>Gotówka na autobusy!</strong> (tylko cash)</li>
-                <li>Kąpielówki, ręcznik plażowy, krem z filtrem</li>
-                <li>Wygodne buty na zwiedzanie Nesebaru</li>
-            </ul>
-        </div>
-
-        <div class="card info-card reveal">
-            <h4>📱 Przydatne apki</h4>
-            <ul>
-                <li><strong>Wizz Air</strong> - karta pokładowa, status lotu</li>
-                <li><strong>Booking.com</strong> - potwierdzenie rezerwacji</li>
-                <li><strong>Google Maps</strong> - rozkłady autobusów, nawigacja</li>
-                <li><strong>Revolut / Wise</strong> - płatności w BGN bez prowizji</li>
-            </ul>
-        </div>
-
-        <div class="card info-card reveal">
-            <h4>💵 Orientacyjne ceny</h4>
-            <ul>
-                <li>Piwo 0.5l w barze: <span class="price-tag">3-7 BGN (6-14 PLN)</span></li>
-                <li>Wódka 0.7l w sklepie: <span class="price-tag">8-15 BGN (16-30 PLN)</span></li>
-                <li>Obiad w restauracji: <span class="price-tag">15-25 BGN (30-50 PLN)</span></li>
-                <li>Leżak na plaży: <span class="price-tag">10-20 BGN (20-40 PLN)</span></li>
-            </ul>
-        </div>
-
-        <div class="card info-card reveal">
-            <h4>🚨 Numery alarmowe</h4>
-            <ul>
-                <li><strong>112</strong> - Numer alarmowy (policja/pogotowie)</li>
-                <li><strong>+359 2 987 26 10</strong> - Ambasada RP w Sofii</li>
-                <li>Pogoda we wrześniu: ☀️ ~27°C, woda ~24°C</li>
-                <li><strong>Strefa czasowa:</strong> +1h vs Polska (EET)</li>
-            </ul>
-        </div>
+    <div class="card card-success reveal" style="margin-top: 1rem;">
+        <p>✅ <strong>Bułgaria = jeden z najtańszych krajów w Europie.</strong>
+        Piwo w barze 6–14 PLN, obiad w restauracji 30–50 PLN, taxi po mieście 10–30 PLN.</p>
     </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-    <span class="emoji-big">🍻</span>
-    <p><strong>MĘSKI WYPAD 2026</strong> &bull; Burgas & Sunny Beach</p>
-    <p style="margin-top:.3rem;">Na zdrowie, Chłopaki! 🇧🇬</p>
+    <div class="footer-bg-text">MESKI WYPAD 2026</div>
+    <div class="footer-stamp reveal">
+        <div class="stamp-title">MĘSKI WYPAD 2026</div>
+        <div class="stamp-sub">Burgas &amp; Sunny Beach · Bułgaria</div>
+    </div>
+    <div class="footer-bottom">Na zdrowie, Chłopaki! &nbsp;🇧🇬 🍻</div>
 </footer>
 
 <script>
@@ -821,7 +982,7 @@ function updateCountdown() {
     const el = document.getElementById('countdown');
 
     if (diff <= 0) {
-        el.innerHTML = '<div style="color:var(--accent);font-weight:700;font-size:1.2rem;">JEDZIEMY! 🔥</div>';
+        el.innerHTML = '<div style="color:var(--gold-2);font-weight:700;font-size:1.3rem;font-family:\'Bebas Neue\',sans-serif;letter-spacing:.12em;">JEDZIEMY! 🔥</div>';
         return;
     }
 
@@ -855,10 +1016,9 @@ const observer = new IntersectionObserver((entries) => {
         }
     });
 }, { threshold: 0.1 });
-
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// Nav hide/show on scroll
+// Nav hide/show + active link
 let lastScroll = 0;
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
@@ -866,15 +1026,20 @@ window.addEventListener('scroll', () => {
     nav.classList.toggle('hidden', curr > lastScroll && curr > 80);
     lastScroll = curr;
 
-    // Active nav link
     const sections = document.querySelectorAll('section[id]');
     let current = '';
     sections.forEach(s => {
         if (s.offsetTop - 120 <= curr) current = s.id;
     });
-    document.querySelectorAll('.nav-inner a').forEach(a => {
+    document.querySelectorAll('.nav-inner a:not(.nav-logo)').forEach(a => {
         a.classList.toggle('active', a.getAttribute('href') === '#' + current);
     });
+}, { passive: true });
+
+// Hero parallax
+const heroBg = document.getElementById('heroBg');
+window.addEventListener('scroll', () => {
+    if (heroBg) heroBg.style.transform = `scale(1.08) translateY(${window.scrollY * 0.28}px)`;
 }, { passive: true });
 
 // Open Day 1 by default
