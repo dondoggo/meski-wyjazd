@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MĘSKI WYPAD - Burgas & Sunny Beach 2026</title>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #0d0d0d;
+            --bg-card: #1a1a1a;
+            --bg-card-hover: #222;
+            --accent: #ff6a00;
+            --accent-glow: rgba(255, 106, 0, 0.3);
+            --neon: #00e0ff;
+            --neon-glow: rgba(0, 224, 255, 0.25);
+            --text: #e8e8e8;
+            --text-muted: #999;
+            --border: #333;
+            --success: #00c853;
+            --radius: 12px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(13,13,13,0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 1rem;
+            transition: transform .3s;
+        }
+        nav.hidden { transform: translateY(-100%); }
+        .nav-inner {
+            max-width: 900px; margin: 0 auto;
+            display: flex; align-items: center; gap: .5rem;
+            overflow-x: auto; scrollbar-width: none;
+            padding: .6rem 0;
+        }
+        .nav-inner::-webkit-scrollbar { display: none; }
+        .nav-inner a {
+            color: var(--text-muted); text-decoration: none;
+            font-size: .8rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: .04em; white-space: nowrap;
+            padding: .35rem .7rem; border-radius: 6px;
+            transition: color .2s, background .2s;
+        }
+        .nav-inner a:hover, .nav-inner a.active {
+            color: var(--accent); background: rgba(255,106,0,.1);
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center;
+            padding: 2rem 1.5rem;
+            background:
+                linear-gradient(180deg, rgba(13,13,13,0) 0%, rgba(13,13,13,.6) 50%, var(--bg) 100%),
+                url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1400&q=80') center/cover no-repeat;
+            position: relative;
+        }
+        .hero::after {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 50% 80%, var(--accent-glow) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .hero-content { position: relative; z-index: 1; }
+        .hero-badge {
+            display: inline-block;
+            background: var(--accent); color: #000;
+            font-size: .75rem; font-weight: 800; text-transform: uppercase;
+            letter-spacing: .1em; padding: .3rem .9rem; border-radius: 20px;
+            margin-bottom: 1.2rem;
+        }
+        .hero h1 {
+            font-size: clamp(2.2rem, 8vw, 4.5rem);
+            font-weight: 900; line-height: 1.05;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: .5rem;
+        }
+        .hero h2 {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            font-weight: 400; color: var(--neon);
+            text-shadow: 0 0 20px var(--neon-glow);
+            margin-bottom: .4rem;
+        }
+        .hero .dates {
+            font-size: clamp(1.1rem, 3vw, 1.6rem);
+            font-weight: 700; color: #fff;
+            margin-bottom: 1.5rem;
+        }
+        .hero-stats {
+            display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        .hero-stat {
+            text-align: center;
+        }
+        .hero-stat .num {
+            font-size: 2rem; font-weight: 900; color: var(--accent);
+            display: block; line-height: 1;
+        }
+        .hero-stat .label {
+            font-size: .7rem; text-transform: uppercase; color: var(--text-muted);
+            letter-spacing: .05em;
+        }
+        .scroll-hint {
+            position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+            z-index: 1; animation: bounce 2s infinite;
+            color: var(--text-muted); font-size: 1.5rem;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+
+        /* SECTIONS */
+        .section {
+            max-width: 900px; margin: 0 auto;
+            padding: 4rem 1.5rem;
+        }
+        .section-title {
+            font-size: 1.8rem; font-weight: 800; text-transform: uppercase;
+            margin-bottom: .3rem;
+            display: flex; align-items: center; gap: .5rem;
+        }
+        .section-title .emoji { font-size: 1.5rem; }
+        .section-sub {
+            color: var(--text-muted); font-size: .9rem; margin-bottom: 2rem;
+        }
+        .divider {
+            height: 3px; width: 60px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            border-radius: 2px; margin-bottom: 2rem;
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: border-color .3s, box-shadow .3s;
+        }
+        .card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+        .card h3 {
+            font-size: 1.1rem; font-weight: 700;
+            margin-bottom: .5rem; color: #fff;
+        }
+
+        /* FLIGHT CARDS */
+        .flight-card {
+            display: flex; align-items: center; gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+        .flight-icon {
+            font-size: 2.5rem; flex-shrink: 0;
+        }
+        .flight-route {
+            flex: 1; min-width: 200px;
+        }
+        .flight-route .airports {
+            font-size: 1.3rem; font-weight: 800; color: #fff;
+        }
+        .flight-route .airports .arrow { color: var(--accent); margin: 0 .4rem; }
+        .flight-meta {
+            font-size: .85rem; color: var(--text-muted);
+        }
+        .flight-badge {
+            background: rgba(255,106,0,.15); color: var(--accent);
+            font-size: .75rem; font-weight: 700;
+            padding: .2rem .6rem; border-radius: 6px;
+            display: inline-block; margin-top: .3rem;
+        }
+
+        /* ACCOMMODATION */
+        .accom-grid {
+            display: grid; grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        @media (min-width: 600px) {
+            .accom-grid { grid-template-columns: 1fr 1fr; }
+        }
+        .accom-img {
+            width: 100%; height: 220px; object-fit: cover;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+        .accom-details { display: flex; flex-direction: column; gap: .7rem; }
+        .accom-detail {
+            display: flex; align-items: flex-start; gap: .5rem;
+            font-size: .9rem;
+        }
+        .accom-detail .icon { font-size: 1.1rem; flex-shrink: 0; margin-top: .1rem; }
+        .btn {
+            display: inline-flex; align-items: center; gap: .4rem;
+            background: var(--accent); color: #000;
+            font-weight: 700; font-size: .9rem;
+            padding: .7rem 1.4rem; border-radius: 8px;
+            text-decoration: none;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        /* TRANSPORT TABLE */
+        .transport-grid {
+            display: grid; grid-template-columns: 1fr; gap: 1rem;
+        }
+        @media (min-width: 600px) {
+            .transport-grid { grid-template-columns: 1fr 1fr; }
+        }
+        .transport-card .t-label {
+            font-size: .75rem; text-transform: uppercase;
+            color: var(--accent); font-weight: 700;
+            letter-spacing: .05em; margin-bottom: .3rem;
+        }
+
+        /* TIMELINE */
+        .timeline { position: relative; padding-left: 2rem; }
+        .timeline::before {
+            content: ''; position: absolute; left: .55rem; top: 0; bottom: 0;
+            width: 2px; background: var(--border);
+        }
+        .day-card {
+            position: relative; margin-bottom: 1.2rem;
+            cursor: pointer;
+        }
+        .day-card::before {
+            content: ''; position: absolute;
+            left: -1.55rem; top: 1.2rem;
+            width: 12px; height: 12px;
+            background: var(--accent); border-radius: 50%;
+            border: 2px solid var(--bg);
+            box-shadow: 0 0 8px var(--accent-glow);
+            z-index: 1;
+        }
+        .day-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1rem 1.2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: border-color .3s, box-shadow .3s;
+        }
+        .day-card.open .day-header,
+        .day-header:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+        .day-tag {
+            font-size: .65rem; font-weight: 800;
+            text-transform: uppercase; letter-spacing: .08em;
+            color: var(--accent); margin-bottom: .15rem;
+        }
+        .day-title {
+            font-size: 1.05rem; font-weight: 700; color: #fff;
+        }
+        .day-toggle {
+            font-size: 1.2rem; transition: transform .3s;
+            color: var(--text-muted);
+        }
+        .day-card.open .day-toggle { transform: rotate(180deg); }
+        .day-body {
+            max-height: 0; overflow: hidden;
+            transition: max-height .4s ease;
+        }
+        .day-card.open .day-body { max-height: 1200px; }
+        .day-body-inner {
+            padding: 1rem 1.2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 var(--radius) var(--radius);
+        }
+        .event {
+            display: flex; gap: .6rem;
+            padding: .5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,.05);
+            font-size: .9rem;
+        }
+        .event:last-child { border-bottom: none; }
+        .event-time {
+            color: var(--neon); font-weight: 700;
+            font-size: .8rem; min-width: 50px;
+            flex-shrink: 0; padding-top: .1rem;
+        }
+
+        /* BUDGET TABLE */
+        .budget-table {
+            width: 100%; border-collapse: collapse;
+            font-size: .9rem;
+        }
+        .budget-table th {
+            text-align: left; padding: .7rem .8rem;
+            font-size: .7rem; text-transform: uppercase;
+            letter-spacing: .06em; color: var(--text-muted);
+            border-bottom: 2px solid var(--border);
+        }
+        .budget-table td {
+            padding: .7rem .8rem;
+            border-bottom: 1px solid rgba(255,255,255,.05);
+        }
+        .budget-table tr:hover td { background: rgba(255,255,255,.02); }
+        .budget-table .total td {
+            font-weight: 800; color: var(--accent);
+            border-top: 2px solid var(--accent);
+            font-size: 1rem;
+        }
+
+        /* INFO GRID */
+        .info-grid {
+            display: grid; grid-template-columns: 1fr; gap: 1rem;
+        }
+        @media (min-width: 600px) {
+            .info-grid { grid-template-columns: 1fr 1fr; }
+        }
+        .info-card h4 {
+            font-size: .85rem; font-weight: 700;
+            color: var(--accent); margin-bottom: .5rem;
+            display: flex; align-items: center; gap: .3rem;
+        }
+        .info-card ul {
+            list-style: none; font-size: .85rem;
+        }
+        .info-card li {
+            padding: .25rem 0;
+            padding-left: 1.2rem;
+            position: relative;
+        }
+        .info-card li::before {
+            content: ''; position: absolute; left: 0; top: .6rem;
+            width: 5px; height: 5px; border-radius: 50%;
+            background: var(--accent);
+        }
+
+        /* PRICE TAG */
+        .price-tag {
+            display: inline-block;
+            background: rgba(0,224,255,.1);
+            color: var(--neon);
+            font-weight: 700; font-size: .8rem;
+            padding: .15rem .5rem; border-radius: 4px;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center; padding: 3rem 1.5rem;
+            color: var(--text-muted); font-size: .8rem;
+            border-top: 1px solid var(--border);
+        }
+        footer .emoji-big { font-size: 2rem; display: block; margin-bottom: .5rem; }
+
+        /* REVEAL ANIMATION */
+        .reveal {
+            opacity: 0; transform: translateY(30px);
+            transition: opacity .6s ease, transform .6s ease;
+        }
+        .reveal.visible {
+            opacity: 1; transform: translateY(0);
+        }
+
+        /* COUNTDOWN */
+        .countdown {
+            display: flex; gap: 1rem; justify-content: center;
+            flex-wrap: wrap; margin-top: .5rem;
+        }
+        .countdown-item {
+            text-align: center;
+            min-width: 60px;
+        }
+        .countdown-item .val {
+            font-size: 1.8rem; font-weight: 900;
+            color: var(--neon);
+            text-shadow: 0 0 15px var(--neon-glow);
+            line-height: 1;
+        }
+        .countdown-item .unit {
+            font-size: .65rem; text-transform: uppercase;
+            color: var(--text-muted); letter-spacing: .05em;
+        }
+
+        /* WEATHER BADGE */
+        .weather-badge {
+            display: inline-flex; align-items: center; gap: .4rem;
+            background: rgba(255,255,255,.08);
+            padding: .4rem .8rem; border-radius: 8px;
+            font-size: .85rem; margin-top: .5rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+    <div class="nav-inner">
+        <a href="#hero">Start</a>
+        <a href="#loty">Loty</a>
+        <a href="#nocleg">Nocleg</a>
+        <a href="#transport">Transport</a>
+        <a href="#plan">Plan</a>
+        <a href="#budzet">Budżet</a>
+        <a href="#info">Info</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+    <div class="hero-content">
+        <div class="hero-badge">Wrzesień 2026</div>
+        <h1>Męski Wypad</h1>
+        <h2>Burgas & Sunny Beach, Bułgaria</h2>
+        <div class="dates">7 - 11 września 2026</div>
+        <div class="hero-stats">
+            <div class="hero-stat"><span class="num">8</span><span class="label">Chłopaków</span></div>
+            <div class="hero-stat"><span class="num">5</span><span class="label">Dni</span></div>
+            <div class="hero-stat"><span class="num">4</span><span class="label">Noce</span></div>
+            <div class="hero-stat"><span class="num">27°C</span><span class="label">Powietrze</span></div>
+        </div>
+        <div class="weather-badge">
+            ☀️ Woda ~24°C &nbsp;|&nbsp; Powietrze ~27°C
+        </div>
+        <div class="countdown" id="countdown"></div>
+    </div>
+    <div class="scroll-hint">&#8595;</div>
+</section>
+
+<!-- LOTY -->
+<section class="section" id="loty">
+    <div class="reveal">
+        <h2 class="section-title"><span class="emoji">✈️</span> Loty</h2>
+        <p class="section-sub">Wizz Air, bezpośrednie przeloty z Warszawy</p>
+        <div class="divider"></div>
+    </div>
+
+    <div class="card flight-card reveal">
+        <div class="flight-icon">🛫</div>
+        <div class="flight-route">
+            <div class="airports">WAW <span class="arrow">→</span> BOJ</div>
+            <div class="flight-meta">Poniedziałek, 7 września 2026 &bull; ~2h 30min</div>
+            <div class="flight-badge">Wizz Air W6 1561</div>
+        </div>
+    </div>
+
+    <div class="card flight-card reveal">
+        <div class="flight-icon">🛬</div>
+        <div class="flight-route">
+            <div class="airports">BOJ <span class="arrow">→</span> WAW</div>
+            <div class="flight-meta">Piątek, 11 września 2026 &bull; ~2h 30min</div>
+            <div class="flight-badge">Wizz Air W6 1562</div>
+        </div>
+    </div>
+
+    <div class="card reveal" style="border-left: 3px solid var(--neon); margin-top: .5rem;">
+        <p style="font-size: .85rem;">
+            💡 <strong>Pamiętaj:</strong> Online check-in 24h przed lotem w apce Wizz Air.
+            Dowód osobisty wystarczy (Bułgaria jest w UE).
+        </p>
+    </div>
+</section>
+
+<!-- NOCLEG -->
+<section class="section" id="nocleg">
+    <div class="reveal">
+        <h2 class="section-title"><span class="emoji">🏠</span> Nocleg</h2>
+        <p class="section-sub">House Sarafovo Beach &bull; 4 noce</p>
+        <div class="divider"></div>
+    </div>
+
+    <div class="card reveal">
+        <div class="accom-grid">
+            <img class="accom-img"
+                 src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600&q=80"
+                 alt="House Sarafovo Beach"
+                 loading="lazy">
+            <div class="accom-details">
+                <div class="accom-detail">
+                    <span class="icon">📍</span>
+                    <span><strong>Sarafovo, Burgas, Bułgaria</strong><br>1.5 km od lotniska (20 min pieszo!)</span>
+                </div>
+                <div class="accom-detail">
+                    <span class="icon">📅</span>
+                    <span>Check-in: <strong>7.09</strong> od 14:00<br>Check-out: <strong>11.09</strong> do 12:00</span>
+                </div>
+                <div class="accom-detail">
+                    <span class="icon">💰</span>
+                    <span><strong>~300-500 PLN / os.</strong> (pokoje 2-osobowe)</span>
+                </div>
+                <div class="accom-detail">
+                    <span class="icon">🏖️</span>
+                    <span>Spokojna dzielnica z plażą, restauracje, sklepy, autobusy do centrum</span>
+                </div>
+                <a href="https://www.booking.com/searchresults.pl.html?ss=House+Sarafovo+Beach" target="_blank" class="btn">
+                    🔗 Zobacz na Booking.com
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TRANSPORT -->
+<section class="section" id="transport">
+    <div class="reveal">
+        <h2 class="section-title"><span class="emoji">🚌</span> Transport</h2>
+        <p class="section-sub">Jak się poruszać po Burgas i okolicach</p>
+        <div class="divider"></div>
+    </div>
+
+    <div class="transport-grid">
+        <div class="card transport-card reveal">
+            <div class="t-label">Lotnisko → Hotel</div>
+            <h3>🚶 Pieszo ~20 min</h3>
+            <p style="font-size:.85rem;color:var(--text-muted)">
+                Tylko 1.5 km! Alternatywnie taxi <span class="price-tag">5-10 BGN</span>
+            </p>
+        </div>
+
+        <div class="card transport-card reveal">
+            <div class="t-label">Autobus do centrum</div>
+            <h3>🚌 Linia #15</h3>
+            <p style="font-size:.85rem;color:var(--text-muted)">
+                Lotnisko → Burgas centrum, ~20 min. Płatność <strong>gotówką!</strong>
+            </p>
+        </div>
+
+        <div class="card transport-card reveal">
+            <div class="t-label">Burgas → Sunny Beach</div>
+            <h3>🚐 M-BUS</h3>
+            <p style="font-size:.85rem;color:var(--text-muted)">
+                Avtogara Jug → Sarafovo → Pomorie → Nesebar → Sunny Beach<br>
+                ~1h 10min &bull; <span class="price-tag">8 BGN (~16 PLN)</span><br>
+                Co 1.5-2h (6:10 – 20:20) &bull; <strong>Tylko gotówka!</strong>
+            </p>
+        </div>
+
+        <div class="card transport-card reveal">
+            <div class="t-label">Taksówki</div>
+            <h3>🚕 Żółte taxi z licznikiem</h3>
+            <p style="font-size:.85rem;color:var(--text-muted)">
+                Po Burgas: <span class="price-tag">5-15 BGN</span><br>
+                Do Sunny Beach: <span class="price-tag">30-50 BGN</span><br>
+                Polecane: Eko Taxi
+            </p>
+        </div>
+    </div>
+
+    <div class="card reveal" style="border-left: 3px solid var(--neon); margin-top: .5rem;">
+        <p style="font-size: .85rem;">
+            💱 <strong>Kurs walut:</strong> 1 BGN (lew bułgarski) ≈ 2 PLN.
+            Wypłać BGN z bankomatu na miejscu. Wybieraj <strong>"bez przewalutowania"</strong> (without conversion).
+            Karty akceptowane w większości miejsc, ale na autobus musisz mieć <strong>gotówkę</strong>.
+        </p>
+    </div>
+</section>
+
+<!-- PLAN DZIEŃ PO DNIU -->
+<section class="section" id="plan">
+    <div class="reveal">
+        <h2 class="section-title"><span class="emoji">📋</span> Plan dzień po dniu</h2>
+        <p class="section-sub">Kliknij dzień, żeby rozwinąć szczegóły</p>
+        <div class="divider"></div>
+    </div>
+
+    <div class="timeline">
+        <!-- DZIEŃ 1 -->
+        <div class="day-card reveal">
+            <div class="day-header" onclick="toggleDay(this)">
+                <div>
+                    <div class="day-tag">Dzień 1 &bull; Poniedziałek, 7 września</div>
+                    <div class="day-title">✈️ Przylot & Sarafovo</div>
+                </div>
+                <span class="day-toggle">&#9660;</span>
+            </div>
+            <div class="day-body">
+                <div class="day-body-inner">
+                    <div class="event"><span class="event-time">~14:00</span><span>Lądowanie na lotnisku BOJ, spacer/taxi do hotelu</span></div>
+                    <div class="event"><span class="event-time">15:00</span><span>Check-in w House Sarafovo Beach, rozpakowanie</span></div>
+                    <div class="event"><span class="event-time">~16:00</span><span>🏖️ Plaża Sarafovo - pierwszy skok do Morza Czarnego (woda ~24°C!)</span></div>
+                    <div class="event"><span class="event-time">~18:00</span><span>💰 Wypłata BGN z bankomatu + zakupy: piwo, przekąski, alkohol</span></div>
+                    <div class="event"><span class="event-time">~19:30</span><span>🍽️ Kolacja w lokalnej restauracji: kebapcheta, sałatka shopska, piwo Kamenitza</span></div>
+                    <div class="event"><span class="event-time">~21:00</span><span>🌅 Wieczorny spacer po plaży, piwo w beach barze</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DZIEŃ 2 -->
+        <div class="day-card reveal">
+            <div class="day-header" onclick="toggleDay(this)">
+                <div>
+                    <div class="day-tag">Dzień 2 &bull; Wtorek, 8 września</div>
+                    <div class="day-title">🏙️ Burgas City</div>
+                </div>
+                <span class="day-toggle">&#9660;</span>
+            </div>
+            <div class="day-body">
+                <div class="day-body-inner">
+                    <div class="event"><span class="event-time">~9:00</span><span>Śniadanie, autobus #15 do centrum Burgas (~20 min)</span></div>
+                    <div class="event"><span class="event-time">~10:00</span><span>🚶 Spacer: ul. Aleksandrowska (deptak), Sea Garden (park nad morzem)</span></div>
+                    <div class="event"><span class="event-time">~12:00</span><span>🏖️ Centralna plaża Burgas - kąpiel i opalanie</span></div>
+                    <div class="event"><span class="event-time">~14:00</span><span>🍖 Obiad w mehanie (bułgarska tawerna) - grillowane mięsa + rakia</span></div>
+                    <div class="event"><span class="event-time">~16:00</span><span>⛵ Port Burgas, rejs na wyspę Św. Anastazji (opcjonalnie) lub plaża</span></div>
+                    <div class="event"><span class="event-time">~19:00</span><span>🍽️ Kolacja w restauracji z widokiem na morze</span></div>
+                    <div class="event"><span class="event-time">~21:00+</span><span>🎉 Beach bary: Saxa Beach, Caribe (bałkańska impreza!) lub klub Dock 5 w porcie</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DZIEŃ 3 -->
+        <div class="day-card reveal">
+            <div class="day-header" onclick="toggleDay(this)">
+                <div>
+                    <div class="day-tag">Dzień 3 &bull; Środa, 9 września</div>
+                    <div class="day-title">🎉 Sunny Beach & Nesebar</div>
+                </div>
+                <span class="day-toggle">&#9660;</span>
+            </div>
+            <div class="day-body">
+                <div class="day-body-inner">
+                    <div class="event"><span class="event-time">~9:00</span><span>🚐 M-BUS z Sarafovo do Sunny Beach (~1h 10min)</span></div>
+                    <div class="event"><span class="event-time">~10:30</span><span>🏖️ Sunny Beach - długa piaszczysta plaża, leżaki, sporty wodne</span></div>
+                    <div class="event"><span class="event-time">~13:00</span><span>🍺 Obiad na plaży - piwo i grill w beach barze</span></div>
+                    <div class="event"><span class="event-time">~15:00</span><span>🏛️ Wycieczka do Nesebaru (Stare Miasto, UNESCO) - autobus/pociąg turystyczny ~10 min</span></div>
+                    <div class="event"><span class="event-time">~17:00</span><span>🌊 Powrót na Sunny Beach, opcjonalnie Action Aquapark</span></div>
+                    <div class="event"><span class="event-time">~19:00</span><span>🍽️ Kolacja - wybór z 400 restauracji na Sunny Beach</span></div>
+                    <div class="event"><span class="event-time">~22:00+</span><span>🔥 IMPREZA! "Las Vegas Bałkanów" - Bedroom Beach, Cacao Beach Club, Mania Beach Bar. Powrót taxi</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DZIEŃ 4 -->
+        <div class="day-card reveal">
+            <div class="day-header" onclick="toggleDay(this)">
+                <div>
+                    <div class="day-tag">Dzień 4 &bull; Czwartek, 10 września</div>
+                    <div class="day-title">😎 Relax & Pożegnalny wieczór</div>
+                </div>
+                <span class="day-toggle">&#9660;</span>
+            </div>
+            <div class="day-body">
+                <div class="day-body-inner">
+                    <div class="event"><span class="event-time">~10:00</span><span>Leniwe śniadanie, ostatnia kąpiel na plaży Sarafovo</span></div>
+                    <div class="event"><span class="event-time">~12:00</span><span>🚤 Opcja A: Marina Sarafovo - spacer po porcie jachtowym<br>🧖 Opcja B: Wycieczka do Pomorie (20 min autobusem) - uzdrowisko, warzelnie soli</span></div>
+                    <div class="event"><span class="event-time">~14:00</span><span>🍽️ Pożegnalny obiad - owoce morza lub grill w ulubionej restauracji</span></div>
+                    <div class="event"><span class="event-time">~16:00</span><span>🛍️ Ostatnie zakupy: alkohol, pamiątki (rakia, bułgarskie róże)</span></div>
+                    <div class="event"><span class="event-time">~19:00</span><span>🍺 Pożegnalna kolacja + piwo</span></div>
+                    <div class="event"><span class="event-time">wieczór</span><span>📦 Pakowanie, wcześniejszy sen przed jutrzejszym lotem</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DZIEŃ 5 -->
+        <div class="day-card reveal">
+            <div class="day-header" onclick="toggleDay(this)">
+                <div>
+                    <div class="day-tag">Dzień 5 &bull; Piątek, 11 września</div>
+                    <div class="day-title">🛬 Powrót do domu</div>
+                </div>
+                <span class="day-toggle">&#9660;</span>
+            </div>
+            <div class="day-body">
+                <div class="day-body-inner">
+                    <div class="event"><span class="event-time">do 12:00</span><span>Check-out z hotelu</span></div>
+                    <div class="event"><span class="event-time">✈️</span><span>Lot Wizz Air W6 1562: BOJ → WAW (sprawdź godzinę na potwierdzeniu)</span></div>
+                    <div class="event"><span class="event-time">💡</span><span>Z Sarafovo na lotnisko to tylko <strong>20 min pieszo</strong> - taxi niepotrzebne!</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- BUDŻET -->
+<section class="section" id="budzet">
+    <div class="reveal">
+        <h2 class="section-title"><span class="emoji">💰</span> Szacunkowy budżet</h2>
+        <p class="section-sub">Na osobę, przy pokojach 2-osobowych &bull; 1 BGN ≈ 2 PLN</p>
+        <div class="divider"></div>
+    </div>
+
+    <div class="card reveal" style="overflow-x: auto;">
+        <table class="budget-table">
+            <thead>
+                <tr>
+                    <th>Kategoria</th>
+                    <th>BGN</th>
+                    <th>PLN (szacunkowo)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>✈️ Loty (Wizz Air, tam + powrót)</td>
+                    <td>—</td>
+                    <td>300 – 500</td>
+                </tr>
+                <tr>
+                    <td>🏠 Nocleg (4 noce, 2 os./pokój)</td>
+                    <td>—</td>
+                    <td>300 – 500</td>
+                </tr>
+                <tr>
+                    <td>🍽️ Jedzenie (4 dni × 50-80 BGN)</td>
+                    <td>200 – 320</td>
+                    <td>400 – 640</td>
+                </tr>
+                <tr>
+                    <td>🍺 Alkohol (piwo 3-5 PLN, drinki 8-15)</td>
+                    <td>100 – 200</td>
+                    <td>200 – 400</td>
+                </tr>
+                <tr>
+                    <td>🚌 Transport (autobusy, taxi)</td>
+                    <td>40 – 80</td>
+                    <td>80 – 160</td>
+                </tr>
+                <tr>
+                    <td>🎢 Atrakcje, plaże, sporty wodne</td>
+                    <td>30 – 60</td>
+                    <td>60 – 120</td>
+                </tr>
+                <tr class="total">
+                    <td>RAZEM</td>
+                    <td></td>
+                    <td>1 340 – 2 320 PLN</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card reveal" style="border-left: 3px solid var(--success); margin-top: .5rem;">
+        <p style="font-size:.85rem;">
+            ✅ <strong>Bułgaria = jeden z najtańszych krajów w Europie.</strong>
+            Piwo w barze 6-14 PLN, obiad w restauracji 30-50 PLN, taxi po mieście 10-30 PLN.
+        </p>
+    </div>
+</section>
+
+<!-- PRAKTYCZNE INFO -->
+<section class="section" id="info">
+    <div class="reveal">
+        <h2 class="section-title"><span class="emoji">📌</span> Praktyczne informacje</h2>
+        <p class="section-sub">Wszystko co musisz wiedzieć przed wyjazdem</p>
+        <div class="divider"></div>
+    </div>
+
+    <div class="info-grid">
+        <div class="card info-card reveal">
+            <h4>🎒 Co zabrać</h4>
+            <ul>
+                <li><strong>Dowód osobisty</strong> (Bułgaria w UE, paszport niepotrzebny)</li>
+                <li>Karta płatnicza (Visa/MC) - terminale w większości miejsc</li>
+                <li><strong>Gotówka na autobusy!</strong> (tylko cash)</li>
+                <li>Kąpielówki, ręcznik plażowy, krem z filtrem</li>
+                <li>Wygodne buty na zwiedzanie Nesebaru</li>
+            </ul>
+        </div>
+
+        <div class="card info-card reveal">
+            <h4>📱 Przydatne apki</h4>
+            <ul>
+                <li><strong>Wizz Air</strong> - karta pokładowa, status lotu</li>
+                <li><strong>Booking.com</strong> - potwierdzenie rezerwacji</li>
+                <li><strong>Google Maps</strong> - rozkłady autobusów, nawigacja</li>
+                <li><strong>Revolut / Wise</strong> - płatności w BGN bez prowizji</li>
+            </ul>
+        </div>
+
+        <div class="card info-card reveal">
+            <h4>💵 Orientacyjne ceny</h4>
+            <ul>
+                <li>Piwo 0.5l w barze: <span class="price-tag">3-7 BGN (6-14 PLN)</span></li>
+                <li>Wódka 0.7l w sklepie: <span class="price-tag">8-15 BGN (16-30 PLN)</span></li>
+                <li>Obiad w restauracji: <span class="price-tag">15-25 BGN (30-50 PLN)</span></li>
+                <li>Leżak na plaży: <span class="price-tag">10-20 BGN (20-40 PLN)</span></li>
+            </ul>
+        </div>
+
+        <div class="card info-card reveal">
+            <h4>🚨 Numery alarmowe</h4>
+            <ul>
+                <li><strong>112</strong> - Numer alarmowy (policja/pogotowie)</li>
+                <li><strong>+359 2 987 26 10</strong> - Ambasada RP w Sofii</li>
+                <li>Pogoda we wrześniu: ☀️ ~27°C, woda ~24°C</li>
+                <li><strong>Strefa czasowa:</strong> +1h vs Polska (EET)</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <span class="emoji-big">🍻</span>
+    <p><strong>MĘSKI WYPAD 2026</strong> &bull; Burgas & Sunny Beach</p>
+    <p style="margin-top:.3rem;">Na zdrowie, Chłopaki! 🇧🇬</p>
+</footer>
+
+<script>
+// Countdown
+function updateCountdown() {
+    const target = new Date('2026-09-07T00:00:00');
+    const now = new Date();
+    const diff = target - now;
+    const el = document.getElementById('countdown');
+
+    if (diff <= 0) {
+        el.innerHTML = '<div style="color:var(--accent);font-weight:700;font-size:1.2rem;">JEDZIEMY! 🔥</div>';
+        return;
+    }
+
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+
+    el.innerHTML = `
+        <div class="countdown-item"><span class="val">${d}</span><span class="unit">dni</span></div>
+        <div class="countdown-item"><span class="val">${h}</span><span class="unit">godz</span></div>
+        <div class="countdown-item"><span class="val">${m}</span><span class="unit">min</span></div>
+        <div class="countdown-item"><span class="val">${s}</span><span class="unit">sek</span></div>
+    `;
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// Day card toggle
+function toggleDay(header) {
+    const card = header.closest('.day-card');
+    card.classList.toggle('open');
+}
+
+// Reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+        if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            observer.unobserve(e.target);
+        }
+    });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Nav hide/show on scroll
+let lastScroll = 0;
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+    const curr = window.scrollY;
+    nav.classList.toggle('hidden', curr > lastScroll && curr > 80);
+    lastScroll = curr;
+
+    // Active nav link
+    const sections = document.querySelectorAll('section[id]');
+    let current = '';
+    sections.forEach(s => {
+        if (s.offsetTop - 120 <= curr) current = s.id;
+    });
+    document.querySelectorAll('.nav-inner a').forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+}, { passive: true });
+
+// Open Day 1 by default
+document.querySelector('.day-card')?.classList.add('open');
+</script>
+
+</body>
+</html>
